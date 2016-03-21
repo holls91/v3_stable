@@ -225,6 +225,6 @@ CREATE TABLE `fanfiction_stats` (
   `members` int(11) NOT NULL default '0',
   `reviewers` int(11) NOT NULL default '0',
   `newestmember` int(11) NOT NULL default '0'
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 

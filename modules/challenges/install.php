@@ -63,7 +63,7 @@ if($confirm == "yes") {
 	  KEY `uid` (`uid`),
 	  KEY `title_2` (`title`),
 	  KEY `characters` (`characters`)
-	) TYPE=MyISAM;");
+	) ENGINE=MyISAM;");
 	dbquery("INSERT INTO `".TABLEPREFIX."fanfiction_modules`(`version`, `name`) VALUES('$moduleVersion', '$moduleName')");
 	$output = write_message(_ACTIONSUCCESSFUL);
 }

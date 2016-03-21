@@ -34,7 +34,7 @@ dbquery("CREATE TABLE IF NOT EXISTS `".TABLEPREFIX."fanfiction_poll_votes` (
   `vote_poll` int(11) NOT NULL default '0',
   PRIMARY KEY  (`vote_id`),
   KEY `vote_user` (`vote_user`,`vote_poll`)
-) TYPE=MyISAM;") ;
+) ENGINE=MyISAM;") ;
 dbquery("CREATE TABLE IF NOT EXISTS `".TABLEPREFIX."fanfiction_poll` (
 `poll_id` INT NOT NULL AUTO_INCREMENT ,
 `poll_question` VARCHAR( 250 ) NOT NULL ,

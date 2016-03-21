@@ -823,14 +823,14 @@ switch($_GET['step']) {
   `field_code_out` text,
   `field_on` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`field_id`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_authorfields</td><td align='center'>" . ($authorfields ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 				$authorinfo = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_authorinfo` (
   `uid` int(11) NOT NULL default '0',
   `field` int(11) NOT NULL default '0',
   `info` varchar(255) NOT NULL default ' ',
   PRIMARY KEY  (`uid`,`field`),
-  KEY `uid` (`uid`)) TYPE=MyISAM;");
+  KEY `uid` (`uid`)) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_authorinfo</td><td align='center'>" . ($authorinfo ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 				$authorprefs = dbquery("
 CREATE TABLE `".TABLEPREFIX."fanfiction_authorprefs` (
@@ -849,7 +849,7 @@ CREATE TABLE `".TABLEPREFIX."fanfiction_authorprefs` (
   `contact` tinyint(1) NOT NULL default '0',
   `stories` int(11) NOT NULL default '0',
    PRIMARY KEY  (`uid`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_authorprefs</td><td align='center'>" . ($authorprefs ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";				
 				$blocks = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_blocks` (
   `block_id` int(11) NOT NULL auto_increment,
@@ -860,7 +860,7 @@ $output .= "<tr><td>".TABLEPREFIX."fanfiction_authorprefs</td><td align='center'
   `block_variables` text NOT NULL,
   PRIMARY KEY  (`block_id`),
   KEY `block_name` (`block_name`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_blocks</td><td align='center'>" . ($blocks ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 				$classes = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_classes` (
   `class_id` int(11) NOT NULL auto_increment,
@@ -868,7 +868,7 @@ $output .= "<tr><td>".TABLEPREFIX."fanfiction_blocks</td><td align='center'>" . 
   `class_name` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`class_id`),
   KEY `byname` (`class_type`,`class_name`,`class_id`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_classes</td><td align='center'>" . ($classes ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 				$classtypes = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_classtypes` (
   `classtype_id` int(11) NOT NULL auto_increment,
@@ -876,13 +876,13 @@ $output .= "<tr><td>".TABLEPREFIX."fanfiction_classes</td><td align='center'>" .
   `classtype_title` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`classtype_id`),
   UNIQUE KEY `classtype_name` (`classtype_name`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_classtypes</td><td align='center'>" . ($classtypes ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 $coauthors = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_coauthors` (
   `sid` int(11) NOT NULL default '0',
   `uid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`sid`,`uid`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".$tableprefix."fanfiction_coauthors</td><td align='center'>" . ($coauthors ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 				$codeblocks = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_codeblocks` (
   `code_id` int(11) NOT NULL auto_increment,
@@ -891,7 +891,7 @@ $output .= "<tr><td>".$tableprefix."fanfiction_coauthors</td><td align='center'>
   `code_module` varchar(60) default NULL,
   PRIMARY KEY  (`code_id`),
   KEY `code_type` (`code_type`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_codeblocks</td><td align='center'>" . ($codeblocks ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 				$favorites = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_favorites` (
   `uid` int(11) NOT NULL default '0',
@@ -900,7 +900,7 @@ $output .= "<tr><td>".TABLEPREFIX."fanfiction_codeblocks</td><td align='center'>
   `comments` text NOT NULL,
   UNIQUE KEY `byitem` (`item`,`type`,`uid`),
   UNIQUE KEY `byuid` (`uid`,`type`,`item`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_favorites</td><td align='center'>" . ($favorites ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 				$logs = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_log` (
   `log_id` int(11) NOT NULL auto_increment,
@@ -910,7 +910,7 @@ $output .= "<tr><td>".TABLEPREFIX."fanfiction_favorites</td><td align='center'>"
   `log_timestamp` timestamp NOT NULL,
   `log_type` varchar(2) NOT NULL,
   PRIMARY KEY  (`log_id`)
-) TYPE=MyISAM");
+) ENGINE=MyISAM");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_log</td><td align='center'>" . ($logs ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 				$messages = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_messages` (
   `message_id` int(11) NOT NULL auto_increment,
@@ -919,7 +919,7 @@ $output .= "<tr><td>".TABLEPREFIX."fanfiction_log</td><td align='center'>" . ($l
   `message_text` text NOT NULL,
   PRIMARY KEY  (`message_id`),
   KEY `message_name` (`message_name`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_messages</td><td align='center'>" . ($messages ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 				$modules = dbquery("
 CREATE TABLE `".TABLEPREFIX."fanfiction_modules` (
@@ -940,7 +940,7 @@ $output .= "<tr><td>".TABLEPREFIX."fanfiction_modules</td><td align='center'>" .
   `link_access` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`link_id`),
   KEY `link_name` (`link_name`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_pagelinks</td><td align='center'>" . ($pagelinks ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 				$panels = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_panels` (
   `panel_id` int(11) NOT NULL auto_increment,
@@ -953,7 +953,7 @@ $output .= "<tr><td>".TABLEPREFIX."fanfiction_pagelinks</td><td align='center'>"
   `panel_type` varchar(20) NOT NULL default 'A',
   PRIMARY KEY  (`panel_id`),
   KEY `panel_type` (`panel_type`,`panel_name`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_panels</td><td align='center'>" . ($panels ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 	$stats = dbquery("CREATE TABLE `".TABLEPREFIX."fanfiction_stats` (
   `sitekey` varchar(50) NOT NULL default '0',
@@ -966,7 +966,7 @@ $output .= "<tr><td>".TABLEPREFIX."fanfiction_panels</td><td align='center'>" . 
   `members` int(11) NOT NULL default '0',
   `reviewers` int(11) NOT NULL default '0',
   `newestmember` int(11) NOT NULL default '0'
-) TYPE=MyISAM");
+) ENGINE=MyISAM");
 	dbquery("INSERT INTO ".TABLEPREFIX."fanfiction_stats(`sitekey`, `newestmember`) VALUES('".SITEKEY."', '1')");
 $output .= "<tr><td>".TABLEPREFIX."fanfiction_stats</td><td align='center'>" . ($stats ? "<img src=\"../images/check.gif\">" : "<img src=\"../images/X.gif\">") ."</td></tr>";
 $output .= "</table>";
@@ -1157,7 +1157,7 @@ if(!empty(\$sitekey)) \$dbconnect = dbconnect(\$dbhost, \$dbuser,\$dbpass, \$dbn
   `smtp_username` varchar(50) default NULL,
   `smtp_password` varchar(50) default NULL,
   PRIMARY KEY  (`sitekey`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 if($settings) $output .= write_message("<img src=\"../images/check.gif\"> "._SETTINGSTABLESUCCESS." <br /><a href='upgrade20.php?step=2&amp;settingsprefix=".$_POST['settingsprefix']."'>"._CONTINUE."</a>");
 else $output .= write_message(_SETTINGSTABLEAUTOFAIL." <br /><a href='upgrade20.php?step=2&amp;settingsprefix=".$_POST['settingsprefix']."'>"._CONTINUE."</a> ");
 		}

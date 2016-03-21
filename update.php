@@ -105,7 +105,7 @@ CREATE TABLE `".TABLEPREFIX."fanfiction_stats` (
   `members` int(11) NOT NULL default '0',
   `reviewers` int(11) NOT NULL default '0',
   `newestmember` int(11) NOT NULL default '0'
-) TYPE=MyISAM");
+) ENGINE=MyISAM");
 		dbquery("INSERT INTO ".TABLEPREFIX."fanfiction_stats(`sitekey`) VALUES('SITEKEY')");
 		dbquery("ALTER TABLE `".TABLEPREFIX."fanfiction_inseries` DROP `updated`");
 		dbquery("ALTER TABLE `".TABLEPREFIX."fanfiction_news` ADD `comments` INT NOT NULL DEFAULT '0'");
@@ -210,7 +210,7 @@ CREATE TABLE `".TABLEPREFIX."fanfiction_modules` (
   `sid` int(11) NOT NULL default '0',
   `uid` int(11) NOT NULL default '0',
   PRIMARY KEY  (`sid`,`uid`)
-) TYPE=MyISAM;");
+) ENGINE=MyISAM;");
 		dbquery("ALTER TABLE `".TABLEPREFIX."fanfiction_authorprefs` ADD `stories` INT NOT NULL DEFAULT '0'");
 		$alist = array( );
 		$authors = dbquery("SELECT uid, count(uid) AS count FROM ".TABLEPREFIX."fanfiction_stories WHERE validated > 0 GROUP BY uid");
@@ -240,7 +240,7 @@ CREATE TABLE `".TABLEPREFIX."fanfiction_modules` (
 			  `sid` int(11) NOT NULL default '0',
 			  `uid` int(11) NOT NULL default '0',
 			  PRIMARY KEY  (`sid`,`uid`)
-			) TYPE=MyISAM;");
+			) ENGINE=MyISAM;");
 			dbquery("ALTER TABLE `".TABLEPREFIX."fanfiction_authorprefs` ADD `stories` INT NOT NULL DEFAULT '0'");
 		}		
 		$authors = dbquery("SELECT uid, count(uid) AS count FROM ".TABLEPREFIX."fanfiction_stories WHERE validated > 0 GROUP BY uid");
@@ -263,7 +263,7 @@ CREATE TABLE `".TABLEPREFIX."fanfiction_modules` (
 			  `sid` int(11) NOT NULL default '0',
 			  `uid` int(11) NOT NULL default '0',
 			  PRIMARY KEY  (`sid`,`uid`)
-			) TYPE=MyISAM;");
+			) ENGINE=MyISAM;");
 			dbquery("ALTER TABLE `".TABLEPREFIX."fanfiction_authorprefs` ADD `stories` INT NOT NULL DEFAULT '0'");
 		}
 		$storiesAdded = dbquery("SHOW COLUMNS FROM ".TABLEPREFIX."fanfiction_authorprefs LIKE 'stories'");

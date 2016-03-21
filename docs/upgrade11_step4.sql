@@ -8,13 +8,13 @@ CREATE TABLE `fanfiction_authorfields` (
   `field_code_out` text,
   `field_on` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`field_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_authorinfo` (
   `uid` int(11) NOT NULL default '0',
   `field` int(11) NOT NULL default '0',
   `info` varchar(255) NOT NULL default ' ',
   KEY `uid` (`uid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_authorprefs` (
   `uid` int(11) NOT NULL default '0',
   `newreviews` tinyint(1) NOT NULL default '0',
@@ -30,7 +30,7 @@ CREATE TABLE `fanfiction_authorprefs` (
   `categories` varchar(200) NOT NULL default '0',
   `contact` tinyint(1) NOT NULL default '0',
    PRIMARY KEY  (`uid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_blocks` (
   `block_id` int(11) NOT NULL auto_increment,
   `block_name` varchar(30) NOT NULL default '',
@@ -40,7 +40,7 @@ CREATE TABLE `fanfiction_blocks` (
   `block_variables` text NOT NULL,
   PRIMARY KEY  (`block_id`),
   KEY `block_name` (`block_name`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_chapters` (
   `chapid` int(11) NOT NULL auto_increment,
   `title` varchar(250) NOT NULL default '',
@@ -61,34 +61,34 @@ CREATE TABLE `fanfiction_chapters` (
   KEY `inorder` (`inorder`),
   KEY `title` (`title`),
   KEY `validated` (`validated`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_classes` (
   `class_id` int(11) NOT NULL auto_increment,
   `class_type` int(11) NOT NULL default '0',
   `class_name` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`class_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_classtypes` (
   `classtype_id` int(11) NOT NULL auto_increment,
   `classtype_name` varchar(50) NOT NULL default '',
   `classtype_title` varchar(50) NOT NULL default '',
   PRIMARY KEY  (`classtype_id`),
   KEY `classtype_title` (`classtype_title`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_codeblocks` (
   `code_id` int(11) NOT NULL auto_increment,
   `code_text` text NOT NULL,
   `code_type` varchar(20) default NULL,
   `code_module` varchar(60) default NULL,
   PRIMARY KEY  (`code_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_favorites` (
   `uid` int(11) NOT NULL default '0',
   `item` int(11) NOT NULL default '0',
   `type` char(2) NOT NULL default '',
   `comments` text NULL,
   KEY `uid` (`uid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_inseries` (
   `seriesid` int(11) NOT NULL default '0',
   `sid` int(11) NOT NULL default '0',
@@ -99,7 +99,7 @@ CREATE TABLE `fanfiction_inseries` (
   KEY `sid` (`sid`),
   KEY `inorder` (`inorder`),
   KEY `seriesid` (`seriesid`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_log` (
   `log_id` int(11) NOT NULL auto_increment,
   `log_action` varchar(255) default NULL,
@@ -108,21 +108,21 @@ CREATE TABLE `fanfiction_log` (
   `log_timestamp` timestamp NOT NULL,
   `log_type` varchar(2) NOT NULL,
   PRIMARY KEY  (`log_id`)
-) TYPE=MyISAM
+) ENGINE=MyISAM
 CREATE TABLE `fanfiction_messages` (
   `message_id` int(11) NOT NULL auto_increment,
   `message_name` varchar(50) NOT NULL default '',
   `message_title` varchar(200) NOT NULL default '',
   `message_text` text NULL,
   PRIMARY KEY  (`message_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `".$tableprefix."fanfiction_modules` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(100) NOT NULL default 'Test Module',
   `version` varchar(10) NOT NULL default '1.0',
   PRIMARY KEY  (`id`),
   KEY `name_version` (`name`,`version`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_pagelinks` (
   `link_id` int(11) NOT NULL auto_increment,
   `link_name` varchar(50) NOT NULL default '',
@@ -133,7 +133,7 @@ CREATE TABLE `fanfiction_pagelinks` (
   PRIMARY KEY  (`link_id`),
   KEY `link_text` (`link_text`),
   KEY `link_name` (`link_name`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_panels` (
   `panel_id` int(11) NOT NULL auto_increment,
   `panel_name` varchar(50) NOT NULL default 'unknown',
@@ -146,7 +146,7 @@ CREATE TABLE `fanfiction_panels` (
   PRIMARY KEY  (`panel_id`),
   KEY `panel_hidden` (`panel_hidden`),
   KEY `panel_type` (`panel_type`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 CREATE TABLE `fanfiction_series` (
   `seriesid` int(11) NOT NULL auto_increment,
   `title` varchar(200) NOT NULL default '',
@@ -165,7 +165,7 @@ CREATE TABLE `fanfiction_series` (
   KEY `challenges` (`challenges`),
   KEY `characters` (`characters`),
   KEY `classes` (`classes`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 CREATE TABLE `fanfiction_stats` (
   `sitekey` varchar(50) NOT NULL default '0',
@@ -178,4 +178,4 @@ CREATE TABLE `fanfiction_stats` (
   `members` int(11) NOT NULL default '0',
   `reviewers` int(11) NOT NULL default '0',
   `newestmember` int(11) NOT NULL default '0'
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
