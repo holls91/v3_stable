@@ -53,12 +53,12 @@ function sendemail($to_name,$to_email,$from_name,$from_email,$subject,$message,$
 	// Try to determine the right $type setting
  	if(strpos($message, "<br>") || strpos($message, "</p>") || strpos($message, "<br />") || strpos($message, "<br>") || strpos($message, "<a href")) $type = "html";
 	
-	require_once(_BASEDIR."includes/phpmailer_include.php");
-	$mail = new PHPMailer( );
-	if(file_exists("languages/mailer/phpmailer.lang-".$language.".php"))
-		$mail->SetLanguage($language, "language/mailer/");
+	require_once(_BASEDIR."includes/PHPMailerAutoload.php");
+	$mail = new PHPMailer;
+	if(file_exists(_BASEDIR."languages/mailer/phpmailer.lang-".$language.".php"))
+		$mail->SetLanguage($language, _BASEDIR."languages/mailer/");
 	else 
-		$mail->SetLanguage("en", "language/mailer/");
+		$mail->SetLanguage("en", _BASEDIR."languages/mailer/");
 
 	if(!$smtp_host) {
 		$mail->IsMail( );
