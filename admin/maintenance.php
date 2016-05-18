@@ -208,6 +208,7 @@ else {
 	<li><a href='admin.php?action=maintenance&amp;maint=panels'>"._PANELORDER."</a> <A HREF=\"#\" class=\"pophelp\">[?]<span>"._HELP_PANELORDER."</span></A></li>
 	<li><a href='admin.php?action=maintenance&amp;maint=optimize'>"._OPTIMIZE."</a> <A HREF=\"#\" class=\"pophelp\">[?]<span>"._HELP_OPTIMIZE."</span></A></li>
 	<li><a href='admin/backup.php' target='_new'>"._BACKUP."</a> <A HREF=\"#\" class=\"pophelp\">[?]<span>"._HELP_BACKUP."</span></A></li>
+	<li><a href='admin/backup_mk2.php' target='_new'>"._BACKUP."</a> (mk2) <A HREF=\"#\" class=\"pophelp\">[?]<span>"._HELP_BACKUP."</span></A></li>
 	<li><a href='admin.php?action=maintenance&amp;maint=update'>"._UPDATE."</a>  <A HREF=\"#\" class=\"pophelp\">[?]<span>"._HELP_UPDATE."</span></A></li>
 </ul>";
 }
