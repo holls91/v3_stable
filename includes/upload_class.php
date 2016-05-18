@@ -185,7 +185,7 @@ class file_upload {
 		$delete = @unlink($file); 
 		clearstatcache();
 		if (@file_exists($file)) { 
-			$filesys = eregi_replace("/","\\",$file); 
+			$filesys = str_replace("/","\\",$file); 
 			$delete = @system("del $filesys");
 			clearstatcache();
 			if (@file_exists($file)) { 
