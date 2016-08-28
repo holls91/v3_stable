@@ -11,6 +11,7 @@ function dbconnect($dbhost, $dbuser, $dbpass, $dbname ) {
 		die(_FATALERROR." "._NOTCONNECTED);
 	}
 	mysql_select_db($dbname, $mysql_access);
+	mysql_query("SET SESSION sql_mode = 'MYSQL40'");
 	return $mysql_access;
 }
 
