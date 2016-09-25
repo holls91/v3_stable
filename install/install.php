@@ -158,9 +158,9 @@ switch($_GET['step']) {
 			else $fail =  write_message(_PASSWORDTWICE);
 			if(!isset($fail)) {
 				$result = dbquery("INSERT INTO ".$tableprefix."fanfiction_authors(`penname`, `email`, `password`, `date`) VALUES('$penname', '".$_POST['email']."', '$encryptpassword', now( ))");
+				define("USERUID", dbinsertid( ));
 				$skinquery = dbquery("SELECT skin FROM ".$settingsprefix."fanfiction_settings WHERE sitekey = '".SITEKEY."'");
 				list($skin) = dbrow($skinquery);
-				define("USERUID", dbinsertid( ));
 				$result2 = dbquery("INSERT INTO ".$tableprefix."fanfiction_authorprefs(`uid`, `userskin`, `level`) VALUES('".USERUID."', '$skin', '1')");
 				if($result && $result2) $output .= write_message(_ACTIONSUCCESSFUL."<br /><br />Installation complete!  <a href='../user.php?action=login'>Log in</a> to your site and go to the Admin area to configure your archive. <strong>Note:</strong> Please delete the install/ folder!");
 			}
@@ -901,7 +901,7 @@ else $output .= write_message(_SETTINGSTABLEAUTOFAIL."<br /><br /> <a href='inst
 			$language = $_POST['language'];
 			$sitekey = descript($_POST['sitekey']);
 			$settingsprefix = descript($_POST['settingsprefix']);
-			$mysql_access = mysql_connect($dbhost, $dbuser, $dbpass);
+			$mysql_access = mysqli_connect($dbhost, $dbuser, $dbpass);
 			if(!$mysql_access) {
 				$output .= write_message(_CONFIGFAILED);
 			}
