@@ -152,7 +152,7 @@ switch($_GET['step']) {
 			$penname = descript($_POST['newpenname']);
 			if((!$_POST['email']) && !isADMIN) $fail .= "<div style='text-align: center;'>"._EMAILREQUIRED." "._TRYAGAIN."</div>";
 			if($penname && !preg_match("!^[a-z0-9_ ]{3,30}$!i", $penname)) $fail = "<div style='text-align: center;'>"._BADUSERNAME." "._TRYAGAIN."</div>";
-			if(!preg_match("/[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+/i", $_POST[email])) $fail = "<div style='text-align: center;'>"._INVALIDEMAIL." "._TRYAGAIN."</div>";
+			if(!preg_match("/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9.-]+$/", $_POST[email])) $fail = "<div style='text-align: center;'>"._INVALIDEMAIL." "._TRYAGAIN."</div>";
 			if($_POST['password'] == $_POST['password2']) $encryptpassword = md5($_POST[password]);
 			else $fail =  write_message(_PASSWORDTWICE);
 			if(!isset($fail)) {
