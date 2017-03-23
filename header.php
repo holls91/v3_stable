@@ -1,4 +1,5 @@
 <?php
+header('Content-type: text/html; charset=UTF-8');
 // ----------------------------------------------------------------------
 // Copyright (c) 2007 by Tammy Keefer
 // Based on eFiction 1.1
@@ -64,7 +65,6 @@ if(ini_get('register_globals')) {
 Header('Cache-Control: private, no-cache, must-revalidate, max_age=0, post-check=0, pre-check=0');
 header ("Pragma: no-cache"); 
 header ("Expires: 0"); 
-header("Content-Type: text/html; charset="._CHARSET);
 
 // Locate config.php and set the basedir path
 $folder_level = "";
@@ -205,7 +205,7 @@ if($current == "viewstory"){
 		$filename = basename($titleinfo.".html");
 		$ie = strpos("msie", strtolower($_SERVER['HTTP_USER_AGENT'])) !== false ? true : false;
 		if ($ie) $filename = rawurlencode($filename);
-		header("Content-Disposition: inline; filename=\"".$titleinfo."\"");
+		//header("Content-Disposition: inline; filename=\"".$titleinfo."\"");
  	}
 }
 if($current == "viewuser" && isNumber($uid)) {
@@ -217,12 +217,13 @@ echo _DOCTYPE."<html><head>";
 if(!isset($titleinfo)) $titleinfo = "$sitename :: $slogan";
 if(isset($metaDesc)) echo "<meta name='description' content='$metaDesc'>";
 echo "<title>$titleinfo</title>
-<meta http-equiv=\"Content-Type\" content=\"text/html; charset="._CHARSET."\">";
+<link rel=\"shortcut icon\" type=\"image/ico\" href=\"skins/Snow White/images/favicon.ico\" />
+<meta http-equiv=\"Content-Type\" content=\"text/html; charset=\"UTF-8\">";
 if(!isset($_GET['action']) || $_GET['action'] != "printable") {
 echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._BASEDIR."includes/javascript.js\"></script>
 <link rel=\"alternate\" type=\"application/rss+xml\" title=\"$sitename RSS Feed\" href=\""._BASEDIR."rss.php\">";
 if(!empty($tinyMCE)) {
-	echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._BASEDIR."tinymce/jscripts/tiny_mce/tiny_mce.js\"></script>
+	echo "<script language=\"javascript\" type=\"text/javascript\" src=\""._BASEDIR."tinymce/js/tinymce/tinymce.min.js\"></script>
 	<script language=\"javascript\" type=\"text/javascript\"><!--";
 	$tinymessage = dbquery("SELECT message_text FROM ".TABLEPREFIX."fanfiction_messages WHERE message_name = 'tinyMCE' LIMIT 1");
 	list($tinysettings) = dbrow($tinymessage);
@@ -231,28 +232,39 @@ if(!empty($tinyMCE)) {
 	}
 	else {
 		echo "
-	tinyMCE.init({ 
-		theme: 'advanced',
-		height: '250',
+	tinymce.init({
+  		selector: 'textarea:not(.mceNoEditor)',
+  		menubar: false,
 		language: '$language',
-		convert_urls: 'false',
-		mode: 'textareas',
-		extended_valid_elements: 'a[name|href|target|title]',
-		plugins: 'advhr,advimage,advlink,searchreplace,contextmenu,preview,fullscreen,paste".($current == "adminarea" ? ",codeprotect" : "")."',
-		theme_advanced_buttons1_add: 'fontsizeselect',
-		theme_advanced_buttons2_add: 'separator,pasteword,pastetext',
-		theme_advanced_buttons3_add_before: 'tablecontrols,separator',
-		theme_advanced_buttons3_add: 'advhr',
-		theme_advanced_toolbar_align: 'center',
-		theme_advanced_statusbar_location: 'bottom',
-		theme_advanced_path: 'false',
-		editor_deselector: 'mceNoEditor',
-";
+  		theme: 'modern',
+		skin: 'lightgray',
+		min_height: 200,
+		plugins: [
+		    'autolink lists link image charmap paste preview hr anchor pagebreak',
+		    'searchreplace wordcount visualblocks visualchars code fullscreen',
+		    'insertdatetime media nonbreaking save table contextmenu directionality',
+		    'emoticons template textcolor colorpicker textpattern imagetools toc textcolor table'
+		],
+		paste_word_valid_elements: 'b,strong,i,em,h1,h2,u,p,ol,ul,li,a[href],span,color,font-size,font-color,font-family,mark,table,tr,td',
+		  		paste_retain_style_properties : 'all',
+		paste_strip_class_attributes: 'none',
+		toolbar1: 'undo redo | insert styleselect | bold italic underline strikethrough | link image | alignleft aligncenter alignright alignjustify',
+		toolbar2: 'preview | bullist numlist | forecolor backcolor emoticons | fontselect |  fontsizeselect wordcount',
+		image_advtab: true,
+		templates: [
+		    { title: 'Test template 1', content: 'Test 1' },
+		    { title: 'Test template 2', content: 'Test 2' }
+		],
+		content_css: [
+		    '//fonts.googleapis.com/css?family=Lato:300,300i,400,400i',
+		    '//www.tinymce.com/css/codepen.min.css'
+		],";
 		if(USERUID) 
 			echo "		external_image_list_url : '".STORIESPATH."/".USERUID."/images/imagelist.js',";
 		echo "
-		theme_advanced_resizing: true,".($current == "adminarea" ? "\n\t\tentity_encoding: 'raw'" : "\n\t\tinvalid_elements: 'script,object,applet,iframe'")."
+		theme_modern_resizing: true,".($current == "adminarea" ? "\n\t\tentity_encoding: 'raw'" : "\n\t\tinvalid_elements: 'script,object,applet,iframe'")."
    });
+	
 ";
 	}
 	echo "
@@ -266,6 +278,17 @@ var tinyMCEmode = true;
 			tinyMCE.execCommand('mceRemoveControl', false, id);
 	}
 ";
+/*echo "
+var tinyMCEmode = true;
+	function toogleEditorMode(id) {
+		var elm = document.getElementById(id);
+
+		if (tinyMCE.get(id) == null)
+			tinyMCE.execCommand('mceAddControl', false, id);
+		else
+			tinyMCE.execCommand('mceRemoveControl', false, id);
+	}
+";*/
 echo " --></script>";
 }
 }
@@ -325,7 +348,7 @@ document.body.insertAdjacentHTML('beforeEnd', WebBrowser);
 }
 else {
 echo "<style type=\"text/css\">
-#columncontainer { margin: 1em auto; width: auto;}
+#columncontainer { margin: 1em auto; width: auto; padding: 5%;}
 #browseblock, #memberblock { width: 100%; padding: 0; margin: 0; float: left; border: 0px solid transparent; }
 .column { float: left; width: ".($colwidth - 1)."%; }
 html>body .column { width: $colwidth%; }
@@ -333,7 +356,7 @@ html>body .column { width: $colwidth%; }
 #settingsform { margin: 0; padding: 0; border: none; }
 #settingsform FORM { width: 100%; margin: 0 10%; }
 #settingsform LABEL { float: left; display: block; width: 30%; text-align: right; padding-right: 10px; clear: left; }
-#settingsform DIV { margin: 1ex auto; clear: both;}
+#settingsform DIV { clear: both;}
 #settingsform .fieldset SPAN { float: left; display: block; width: 30%; text-align: right; padding-right: 10px; clear: left;}
 #settingsform .fieldset LABEL { float: none; width: auto; display: inline; text-align: left; clear: none; }
 #settingsform { float: left; margin: 1ex 10%; }
@@ -397,9 +420,7 @@ a.pophelp:hover span{ /*the span will display just on :hover state*/
 }
 
 </style>
-<link rel='stylesheet' type='text/css' href='$skindir/style.css' /> \n
-<meta name='viewport' content='width=device-width, initial-scale=1.0' />
-";
+<link rel=\"stylesheet\" type=\"text/css\" href='$skindir/style.css'>";
 }
 echo "</head>";
 $headerSent = true;
