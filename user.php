@@ -46,13 +46,20 @@ else $current = "user";
 // end main function 
 if((empty($action) || $action == "login") && isMEMBER) {
 	$output .= "<div id=\"pagetitle\">"._USERACCOUNT."</div>
-		<div class=\"tblborder\" id=\"useropts\" style=\"padding: 5px; width: 50%; margin: 1em 25%;\">";
-	$panelquery = dbquery("SELECT * FROM ".TABLEPREFIX."fanfiction_panels WHERE panel_hidden != '1' AND panel_level = '1' AND (panel_type = 'U' ".(!$submissionsoff || isADMIN ? " OR panel_type = 'S'" : "").($favorites ? " OR panel_type = 'F'" : "").") ORDER BY panel_type, panel_order, panel_title ASC");
+		<div class=\"usermainpage\" id=\"useropts\" >";
+	
+    //Aggiunta del link per "La mia pagina"
+    if(USERUID){
+    	$output .= "<li><a href=\"viewuser.php?uid=".USERUID."\">La mia pagina</a></li><br/>\n";
+    }
+    
+    $panelquery = dbquery("SELECT * FROM ".TABLEPREFIX."fanfiction_panels WHERE panel_hidden != '1' AND panel_level = '1' AND (panel_type = 'U' ".(!$submissionsoff || isADMIN ? " OR panel_type = 'S'" : "").($favorites ? " OR panel_type = 'F'" : "").") ORDER BY panel_type, panel_order, panel_title ASC");
 	if(!dbnumrows($panelquery)) $output .= _FATALERROR;
 	while($panel = dbassoc($panelquery)) {
-		if(!$panel['panel_url']) $output .=  "<a href=\"user.php?action=".$panel['panel_name']."\">".$panel['panel_title']."</a><br />\n";
-		else $output .= "<a href=\"".$panel['panel_url']."\">".$panel['panel_title']."</a><br />\n";
+		if(!$panel['panel_url']) $output .=  "<li><a href=\"user.php?action=".$panel['panel_name']."\">".$panel['panel_title']."</a></li><br />\n";
+		else $output .= "<li><a href=\"".$panel['panel_url']."\">".$panel['panel_title']."</a></li><br />\n";
 	}
+
 	$output .= "</div>\n";
 }
 else if(!empty($action)) {
