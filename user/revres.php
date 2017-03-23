@@ -29,8 +29,9 @@ if(!defined("_CHARSET")) exit( );
 		$reviewid = isset($_POST['reviewid']) && isNumber($_POST['reviewid']) ? $_POST['reviewid'] : false;
 		$result = dbquery("SELECT review, reviewid, item, type, chapid, uid FROM ".TABLEPREFIX."fanfiction_reviews WHERE reviewid = '".$_POST['rid']."' LIMIT 1");
 		list($review, $reviewid, $item, $type, $chapid, $uid) = dbrow($result);
-		$updated = escapestring($review . "<br><br><i>"._AUTHORSRESPONSE.": " .replace_naughty(descript($_POST['response'], $allowed_tags))."</i>");
-		$success = dbquery("UPDATE ".TABLEPREFIX."fanfiction_reviews SET review = '$updated', respond = '1' WHERE reviewid = '$reviewid'");
+		$updated = escapestring("<i>".replace_naughty(descript($_POST['response'], $allowed_tags))."</i>");
+		$success = dbquery("INSERT INTO ".TABLEPREFIX."fanfiction_reviews (item, chapid, reviewer, uid, review, date, rating, respond, type, source_review_id) VALUES ('$item', '$chapid', '".USERPENNAME."', '".USERUID."', '$updated', now(), '-1', '1', '$type', '$reviewid')");
+		$success = dbquery("UPDATE ".TABLEPREFIX."fanfiction_reviews SET respond = '1' WHERE reviewid = '$reviewid'");
 		if($uid) {
 			$prefsquery = dbquery("SELECT "._UIDFIELD." as uid, "._EMAILFIELD." as email, "._PENNAMEFIELD." as penname, newrespond FROM ".TABLEPREFIX."fanfiction_authorprefs as ap LEFT JOIN "._AUTHORTABLE." ON ap.uid = "._UIDFIELD." WHERE ap.uid = "._UIDFIELD." AND "._UIDFIELD." = '$uid' LIMIT 1");
 			$prefs = dbassoc($prefsquery);
@@ -47,7 +48,9 @@ if(!defined("_CHARSET")) exit( );
 		$reviewid = isset($_GET['reviewid']) && isNumber($_GET['reviewid']) ? $_GET['reviewid'] : false;
 		if(!$reviewid) accessDenied( );
 		$result = dbquery("SELECT review.*, UNIX_TIMESTAMP(review.date) as date FROM ".TABLEPREFIX."fanfiction_reviews as review LEFT JOIN ".TABLEPREFIX."fanfiction_authors as member ON member.uid = review.uid WHERE review.reviewid = '$reviewid' LIMIT 1");
+		$resultResponse = dbquery("SELECT review.*, UNIX_TIMESTAMP(review.date) as date FROM ".TABLEPREFIX."fanfiction_reviews as review LEFT JOIN ".TABLEPREFIX."fanfiction_authors as member ON member.uid = review.uid WHERE review.source_review_id = '$reviewid' LIMIT 1");
 		$reviews = dbassoc($result);
+		$reviewRespond = dbassoc($resultResponse);
 		if(!empty($reviews['respond'])) {
 			$tpl->assign("output", write_message(_ALREADYRESPONDED));
 			$tpl->printToScreen( );

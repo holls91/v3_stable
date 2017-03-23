@@ -46,8 +46,8 @@ if(!isNumber($item)) unset($item);
 
 if($action == "delete") {
 	if(isADMIN && uLEVEL <= 3) $notauthor = 1;
-	$query = dbquery("SELECT item, chapid, type, review, rating, uid FROM ".TABLEPREFIX."fanfiction_reviews WHERE reviewid = '$reviewid' LIMIT 1");
-	list($item, $chapid, $type, $review, $rating, $reviewuid) = dbrow($query);
+	$query = dbquery("SELECT item, chapid, type, review, rating, uid, source_review_id FROM ".TABLEPREFIX."fanfiction_reviews WHERE reviewid = '$reviewid' LIMIT 1");
+	list($item, $chapid, $type, $review, $rating, $reviewuid, $source_review_id) = dbrow($query);
 	if($reviewuid == USERUID) $notauthor = 1;
 	if($type == "SE") $query2 = "SELECT uid FROM ".TABLEPREFIX."fanfiction_series WHERE seriesid = '$item' LIMIT 1";
 	if($type == "ST") $query2 = "SELECT uid FROM ".TABLEPREFIX."fanfiction_stories WHERE sid = '$item' LIMIT 1";
@@ -68,8 +68,10 @@ if($action == "delete") {
 			
 			list($author) = dbrow($query);
 			if($review != "No Review") {
-				dbquery("UPDATE ".TABLEPREFIX."fanfiction_stories SET reviews = (reviews - 1) WHERE sid = '$item'");
-				dbquery("UPDATE ".TABLEPREFIX."fanfiction_chapters SET reviews = (reviews - 1) WHERE chapid = '$chapid'");
+				if($source_review_id == 0){
+					dbquery("UPDATE ".TABLEPREFIX."fanfiction_stories SET reviews = (reviews - 1) WHERE sid = '$item'");
+					dbquery("UPDATE ".TABLEPREFIX."fanfiction_chapters SET reviews = (reviews - 1) WHERE chapid = '$chapid'");
+				}
 			}
 			$count =  dbquery("SELECT AVG(rating) as totalcount FROM ".TABLEPREFIX."fanfiction_reviews WHERE item = '$item' AND type='ST' AND rating != '-1'");
 			list($totalcount) = dbrow($count);
@@ -85,7 +87,10 @@ if($action == "delete") {
 			}
 		}
 		if($type == "SE") {
-			if($review != "No Review") dbquery("UPDATE ".TABLEPREFIX."fanfiction_series SET reviews = (reviews - 1) WHERE seriesid = '$item'");
+			if($review != "No Review") 
+				if($source_review_id == 0){
+					dbquery("UPDATE ".TABLEPREFIX."fanfiction_series SET reviews = (reviews - 1) WHERE seriesid = '$item'");
+				}
 			seriesreview($item);
 		}
 		else {
@@ -95,9 +100,14 @@ if($action == "delete") {
 			}
 		}
 		if($review != "No Review") {
-			dbquery("UPDATE ".TABLEPREFIX."fanfiction_stats SET reviews = reviews - 1");
-			list($count) = dbrow(dbquery("SELECT COUNT(DISTINCT uid) FROM ".TABLEPREFIX."fanfiction_reviews WHERE review != 'No Review' AND uid != 0"));
-			dbquery("UPDATE ".TABLEPREFIX."fanfiction_stats SET reviewers = '$count'");
+			if($source_review_id == 0){
+				dbquery("UPDATE ".TABLEPREFIX."fanfiction_stats SET reviews = reviews - 1");
+				list($count) = dbrow(dbquery("SELECT COUNT(DISTINCT uid) FROM ".TABLEPREFIX."fanfiction_reviews WHERE review != 'No Review' AND uid != 0"));
+				dbquery("UPDATE ".TABLEPREFIX."fanfiction_stats SET reviewers = '$count'");
+			}
+		}
+		if($source_review_id != 0){
+			dbquery("UPDATE ".TABLEPREFIX."fanfiction_reviews SET respond = '0' WHERE reviewid = '$source_review_id'");
 		}
 		dbquery("DELETE FROM ".TABLEPREFIX."fanfiction_reviews WHERE reviewid = '$reviewid'");
 		
@@ -358,7 +368,7 @@ else {
 		$query .= " AND review.reviewid = '$reviewid' ";
 		$count .= " AND review.reviewid = '$reviewid' ";
 	}
-	$query .= "ORDER BY review.reviewid DESC LIMIT $offset,$itemsperpage";
+	$query .= " AND source_review_id = '0' ORDER BY review.reviewid DESC LIMIT $offset,$itemsperpage";
 	$query = dbquery($query);
 	$count = dbquery($count);
 
@@ -366,16 +376,32 @@ else {
 	$counter = 0;
 	while($reviews = dbassoc($query))
 	{
+		
+		$resultResponse = dbquery("SELECT review.*, UNIX_TIMESTAMP(review.date) as date FROM ".TABLEPREFIX."fanfiction_reviews as review WHERE review.source_review_id = '".$reviews['reviewid']."' LIMIT 1");
+		$reviewRespond = dbassoc($resultResponse);
+
+		$recelink = "";
 		$adminlink = "";
-		if(isADMIN && uLEVEL < 4) $adminlink = "<span class='label'>"._ADMINOPTIONS.": </span> [<a href=\"reviews.php?action=edit&amp;reviewid=".$reviews['reviewid']."\">"._EDIT."</a>]";
-		if( (isADMIN && uLEVEL < 4) || (USERUID && USERUID == $reviews['uid'])) $adminlink .= " [<a href=\"reviews.php?action=delete&amp;reviewid=".$reviews['reviewid']."\">"._DELETE."</a>]";
+		if( (isADMIN && uLEVEL < 4) || (USERUID && USERUID == $reviews['uid'])) 
+			{
+				$recelink .= " [<a href=\"reviews.php?action=delete&amp;reviewid=".$reviews['reviewid']."\">"._DELETE." recensione</a>]";
+				$recelink .= " [<a href=\"reviews.php?action=edit&amp;reviewid=".$reviews['reviewid']."\">"._EDIT." recensione</a>]";
+			}	
+		if( (isADMIN && uLEVEL < 4) || (USERUID && USERUID == $reviewRespond['uid'])) 
+			{
+				$adminlink .= " [<a href=\"reviews.php?action=delete&amp;reviewid=".$reviewRespond['reviewid']."\">"._DELETE." risposta</a>]";
+				$adminlink .= " [<a href=\"reviews.php?action=edit&amp;reviewid=".$reviewRespond['reviewid']."\">"._EDIT." risposta</a>]";
+			}	
+
 		if($reviews['uid']) {
-			if(USERUID == $authoruid && $revdelete == 2 && !isADMIN) $adminlink .= " [<a href=\"reviews.php?action=delete&amp;reviewid=".$reviews['reviewid']."\">"._DELETE."</a>]";
+			if(USERUID == $authoruid && $revdelete == 2 && !isADMIN) {
+				$recelink .= " [<a href=\"reviews.php?action=delete&amp;reviewid=".$reviews['reviewid']."\">"._DELETE."</a>]";
+			}
 			$reviewer = "<a href=\"viewuser.php?uid=".$reviews['uid']."\">".$reviews['reviewer']."</a>";
 			$member = _SIGNED;
 		}
 		else {
-			if(USERUID == $authoruid && $revdelete && !isADMIN) $adminlink .= " [<a href=\"reviews.php?action=delete&amp;reviewid=".$reviews['reviewid']."\">"._DELETE."</a>]";
+			if(USERUID == $authoruid && $revdelete && !isADMIN) $recelink .= " [<a href=\"reviews.php?action=delete&amp;reviewid=".$reviews['reviewid']."\">"._DELETE."</a>]";
 			$reviewer = $reviews['reviewer'];
 			$member = _ANONYMOUS;
 		}
@@ -384,6 +410,8 @@ else {
 		$tpl->assign("reviewer"   , $reviewer );
 		$tpl->assign("reportthis", "[<a href=\""._BASEDIR."contact.php?action=report&amp;url=reviews.php?reviewid=".$reviews['reviewid']."\">"._REPORTTHIS."</a>]");
 		$tpl->assign("review"   , stripslashes($reviews['review']));
+		if(!empty($recelink)) $tpl->assign("reviewOptions", "<div class=\"adminoptions\">$recelink</div>");
+		if(!empty($reviewRespond['review'])) $tpl->assign("reviewResponse"   , "<blockquote><p>Risposta dell'autore:</p><br>".stripslashes($reviewRespond['review'])."</blockquote>");
 		$tpl->assign("reviewdate", date("$dateformat $timeformat", $reviews['date']) );
 		$tpl->assign("rating", ratingpics($reviews['rating']) );
 		$tpl->assign("member", $member );
