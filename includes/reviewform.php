@@ -24,7 +24,7 @@ if(!defined("_CHARSET")) exit( );
 if(!isset($item)) $item = "";
 if(!isset($action)) $action == "add";
 $form = "<form method=\"POST\" id=\"reviewform\" enctype=\"multipart/form-data\" action=\"reviews.php?action=".($action == "edit" ? "edit&amp;reviewid=".$review['reviewid'] : "add&amp;type=$type&amp;item=$item").(!empty($nextchapter) ? "&amp;next=$nextchapter" : "")."\">
-<div style=\"width: 350px; margin: 0 auto; text-align: left;\"><label for=\"reviewer\">"._NAME.":</label> ";
+<div id= 'mceInputText'><label for=\"reviewer\">"._NAME.":</label> ";
 if($action != "edit") {
 	$review = array('reviewid' => '', 'reviewer' => '', 'review' => '', 'rating' => '-1');
 	if(isMEMBER)
