@@ -149,7 +149,7 @@ function random_string ($charset_string, $length)
 				else if(!empty($_POST["af_".$field['field_name']])) dbquery("INSERT INTO ".TABLEPREFIX."fanfiction_authorinfo(`uid`, `info`, `field`) VALUES('$uid', '".escapestring($_POST["af_".$field['field_name']])."', '".$field['field_id']."');");
 			}
 /* End dynamic fields */
-			dbquery("UPDATE "._AUTHORTABLE." SET realname='".descript(strip_tags(escapestring($_POST['realname'])), $allowed_tags)."', email='$email', bio='".descript(strip_tags(escapestring($_POST['bio']), $allowed_tags))."', image='".($imageupload && !empty($_POST['image']) ? escapestring($_POST['image']) : "")."' WHERE uid = '$uid'");
+			dbquery("UPDATE "._AUTHORTABLE." SET realname='".descript(strip_tags(escapestring($_POST['realname'])), $allowed_tags)."', email='$email', bio='".descript(strip_tags(escapestring($_POST['bio']), $allowed_tags))."', image='".($imageupload && !empty($_POST['image']) ? "stories/".$uid."/images/".escapestring($_POST['image']) : "")."' WHERE uid = '$uid'");
 			$output .= write_message(_ACTIONSUCCESSFUL."  ".(isset($_GET['uid']) ? _BACK2ADMIN : _BACK2ACCT));
 		}
 	}
@@ -200,7 +200,7 @@ function random_string ($charset_string, $length)
 		}
 /* End dynamic fields */
 	 	if($imageupload == "1")
-	 		$output .= "<div><label for='image'>"._IMAGE.":</label> <INPUT  type=\"text\" class=\"textbox=\" name=\"image\" maxlength=\"200\" value=\"".(!empty($user['image']) ? $user['image'] : "")."\"></div>";
+	 		$output .= "<div><label for='image'>"._IMAGE.":</label> <INPUT  type=\"text\" class=\"textbox=\" name=\"image\" maxlength=\"200\" value=\"".(!empty($user['image']) ? substr(strrchr($user['image'], '/'),1): "")."\"></div>";
 		if($action != "register" || $pwdsetting)
 	 	$output .= "<div><label for='password'>"._PASSWORD.":</label>  <INPUT name=\"password\" class=\"textbox\" value=\"\" type=\"password\">".($action == "register" ? "<font color=\"red\">*</font>" : "")."</div>
 			<div><label for='password2'>"._PASSWORD2.":</label> <INPUT name=\"password2\" class=\"textbox=\" value=\"\" type=\"password\">".($action == "register" ? "<font color=\"red\">*</font>" : "")."</div>";
